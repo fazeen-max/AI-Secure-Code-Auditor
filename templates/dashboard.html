@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Secure Code Auditor</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #080a0d;
+            color: #f1f5f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 25px;
+        }
+
+        .header {
+            margin-bottom: 35px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 7px 12px;
+            border: 1px solid #334155;
+            border-radius: 20px;
+            color: #94a3b8;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 38px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: #101318;
+            border: 1px solid #202631;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 19px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 480px;
+            resize: vertical;
+            background: #07090c;
+            color: #e2e8f0;
+            border: 1px solid #303846;
+            border-radius: 10px;
+            padding: 18px;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #64748b;
+        }
+
+        .scan-button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #e2e8f0;
+            color: #080a0d;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .scan-button:hover {
+            background: #ffffff;
+        }
+
+        .empty {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: #0b0e12;
+            border: 1px solid #252c36;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .stat-number {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .finding {
+            border: 1px solid #303744;
+            border-radius: 10px;
+            padding: 17px;
+            margin-bottom: 14px;
+            background: #0b0e12;
+        }
+
+        .finding-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .finding-type {
+            font-weight: bold;
+        }
+
+        .severity {
+            padding: 5px 9px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .high {
+            background: #3f1515;
+            color: #ff6b6b;
+        }
+
+        .medium {
+            background: #3d3012;
+            color: #facc15;
+        }
+
+        .low {
+            background: #12321f;
+            color: #4ade80;
+        }
+
+        .line {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .code {
+            background: #050608;
+            border: 1px solid #202631;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 12px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+        }
+
+        .message {
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        .recommendation {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .recommendation strong {
+            color: #e2e8f0;
+        }
+
+        @media (max-width: 850px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div class="badge">
+            APPLICATION SECURITY
+        </div>
+
+        <h1>AI Secure Code Auditor</h1>
+
+        <div class="subtitle">
+            Static security analysis for identifying common source-code vulnerabilities
+        </div>
+
+    </div>
+
+
+    <div class="layout">
+
+        <!-- CODE INPUT -->
+
+        <div class="card">
+
+            <h2>Source Code Analysis</h2>
+
+            <form method="POST">
+
+                <textarea
+                    name="code"
+                    placeholder="Paste source code here for security analysis...">{{ submitted_code }}</textarea>
+
+                <button class="scan-button" type="submit">
+                    ANALYZE CODE
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <div class="card">
+
+            <h2>Security Findings</h2>
+
+            {% if findings %}
+
+                <div class="summary">
+
+                    <div class="stat">
+                        <div class="stat-number">
+                            {{ findings|length }}
+                        </div>
+
+                        <div class="stat-label">
+                            Findings
+                        </div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-number">
+                            {{ findings|selectattr("severity", "equalto", "HIGH")|list|length }}
+                        </div>
+
+                        <div class="stat-label">
+                            High Risk
+                        </div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-number">
+                            {{ findings|selectattr("severity", "equalto", "MEDIUM")|list|length }}
+                        </div>
+
+                        <div class="stat-label">
+                            Medium Risk
+                        </div>
+                    </div>
+
+                </div>
+
+
+                {% for finding in findings %}
+
+                    <div class="finding">
+
+                        <div class="finding-header">
+
+                            <div class="finding-type">
+                                {{ finding.type }}
+                            </div>
+
+                            <div class="severity {{ finding.severity|lower }}">
+                                {{ finding.severity }}
+                            </div>
+
+                        </div>
+
+                        <div class="line">
+                            Line {{ finding.line }}
+                        </div>
+
+                        <div class="code">
+                            {{ finding.code }}
+                        </div>
+
+                        <div class="message">
+                            {{ finding.message }}
+                        </div>
+
+                        <div class="recommendation">
+                            <strong>Recommended remediation:</strong>
+                            {{ finding.recommendation }}
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty">
+                    No security analysis has been performed yet.
+                    <br><br>
+                    Submit source code to begin scanning.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
