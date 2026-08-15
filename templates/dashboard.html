@@ -211,6 +211,91 @@
         .recommendation strong {
             color: #e2e8f0;
         }
+        .risk-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.score-box,
+.risk-box {
+    background: #0b0e12;
+    border: 1px solid #252c36;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.score-label {
+    color: #64748b;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.score-number {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.risk-value {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.risk-value.low {
+    color: #4ade80;
+}
+
+.risk-value.medium {
+    color: #facc15;
+}
+
+.risk-value.high {
+    color: #ff6b6b;
+}
+
+.risk-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.risk-stat {
+    background: #0b0e12;
+    border: 1px solid #252c36;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+}
+
+.risk-stat strong {
+    display: block;
+    font-size: 22px;
+}
+
+.risk-stat span {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.high-stat strong,
+.high-stat span {
+    color: #ff6b6b;
+}
+
+.medium-stat strong,
+.medium-stat span {
+    color: #facc15;
+}
+
+.low-stat strong,
+.low-stat span {
+    color: #4ade80;
+}
 
         @media (max-width: 850px) {
             .layout {
@@ -275,6 +360,45 @@
         <div class="card">
 
             <h2>Security Findings</h2>
+            {% if score is not none %}
+
+<div class="risk-summary">
+
+    <div class="score-box">
+        <div class="score-label">SECURITY SCORE</div>
+        <div class="score-number">{{ score }}/100</div>
+    </div>
+
+    <div class="risk-box">
+        <div class="score-label">OVERALL RISK</div>
+
+        <div class="risk-value {{ risk|lower }}">
+            {{ risk }}
+        </div>
+    </div>
+
+</div>
+
+<div class="risk-stats">
+
+    <div class="risk-stat high-stat">
+        <strong>{{ high }}</strong>
+        <span>HIGH</span>
+    </div>
+
+    <div class="risk-stat medium-stat">
+        <strong>{{ medium }}</strong>
+        <span>MEDIUM</span>
+    </div>
+
+    <div class="risk-stat low-stat">
+        <strong>{{ low }}</strong>
+        <span>LOW</span>
+    </div>
+
+</div>
+
+{% endif %}
 
             {% if findings %}
 
