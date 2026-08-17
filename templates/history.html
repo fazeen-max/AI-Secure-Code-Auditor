@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan History - AI Secure Code Auditor</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #080a0d;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .history-card {
+            background: #0d1117;
+            border: 1px solid #252c36;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #252c36;
+        }
+
+        th {
+            color: #94a3b8;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .risk {
+            font-weight: bold;
+        }
+
+        .risk.low {
+            color: #4ade80;
+        }
+
+        .risk.medium {
+            color: #facc15;
+        }
+
+        .risk.high {
+            color: #ff6b6b;
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #e5e7eb;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Scan History</h1>
+
+    <div class="subtitle">
+        Previous security scans
+    </div>
+
+    <div class="history-card">
+
+        {% if history %}
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>SCORE</th>
+                    <th>RISK</th>
+                    <th>HIGH</th>
+                    <th>MEDIUM</th>
+                    <th>LOW</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for scan in history %}
+
+                <tr>
+                    <td>{{ scan.date }}</td>
+
+                    <td>
+                        {{ scan.score }}/100
+                    </td>
+
+                    <td>
+                        <span class="risk {{ scan.risk|lower }}">
+                            {{ scan.risk }}
+                        </span>
+                    </td>
+
+                    <td>{{ scan.high }}</td>
+                    <td>{{ scan.medium }}</td>
+                    <td>{{ scan.low }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty">
+            No scans have been recorded yet.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <a class="back" href="/">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

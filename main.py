@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request
 from analyzer.scanner import scan_code
+import json
+import os
+from datetime import datetime
 
 app = Flask(__name__)
+HISTORY_FILE = "scan_history.json"
 
 
 def calculate_risk(findings):
@@ -28,6 +32,34 @@ def calculate_risk(findings):
         risk = "HIGH"
 
     return score, risk, high, medium, low
+def load_history():
+    if not os.path.exists(HISTORY_FILE):
+        return []
+
+    try:
+        with open(HISTORY_FILE, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def save_scan_history(score, risk, high, medium, low):
+    history = load_history()
+
+    history.append({
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "score": score,
+        "risk": risk,
+        "high": high,
+        "medium": medium,
+        "low": low
+    })
+
+    # Keep the most recent 20 scans
+    history = history[-20:]
+
+    with open(HISTORY_FILE, "w", encoding="utf-8") as file:
+        json.dump(history, file, indent=4)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -51,6 +83,7 @@ def dashboard():
             findings = scan_code(submitted_code)
 
             score, risk, high, medium, low = calculate_risk(findings)
+            save_scan_history(score, risk, high, medium, low)
 
     return render_template(
         "dashboard.html",
@@ -61,6 +94,17 @@ def dashboard():
         high=high,
         medium=medium,
         low=low
+    )
+@app.route("/history")
+def history():
+    scan_history = load_history()
+
+    # Show newest scans first
+    scan_history.reverse()
+
+    return render_template(
+        "history.html",
+        history=scan_history
     )
 
 
