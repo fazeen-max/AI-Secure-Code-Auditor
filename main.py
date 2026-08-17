@@ -1,3 +1,5 @@
+from fileinput import filename
+
 from flask import Flask, render_template, request, send_file
 from analyzer.scanner import scan_code
 import json
@@ -7,6 +9,8 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
+ALLOWED_EXTENSIONS = {".py", ".js", ".java", ".php"}
+MAX_FILE_SIZE = 500_000  # 500 KB
 HISTORY_FILE = "scan_history.json"
 
 
@@ -57,11 +61,21 @@ def save_scan_history(score, risk, high, medium, low):
         "low": low
     })
 
-    # Keep the most recent 20 scans
     history = history[-20:]
 
     with open(HISTORY_FILE, "w", encoding="utf-8") as file:
         json.dump(history, file, indent=4)
+        ALLOWED_EXTENSIONS = {".py", ".js", ".java", ".php"}
+MAX_FILE_SIZE = 500_000
+
+
+def allowed_file(filename):
+    if "." not in filename:
+        return False
+
+    extension = os.path.splitext(filename)[1].lower()
+    return extension in ALLOWED_EXTENSIONS
+    
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -78,14 +92,42 @@ def dashboard():
 
     if request.method == "POST":
 
+        # Get pasted code
         submitted_code = request.form.get("code", "")
 
+        # Get uploaded file
+        uploaded_file = request.files.get("code_file")
+
+        # If a file was uploaded, use the file instead
+        if uploaded_file and uploaded_file.filename:
+
+            if not allowed_file(uploaded_file.filename):
+                return "Invalid file type. Please upload a .py, .js, .java, or .php file.", 400
+
+            file_data = uploaded_file.read()
+
+            if len(file_data) > MAX_FILE_SIZE:
+                return "File is too large. Maximum allowed size is 500 KB.", 400
+
+            try:
+                submitted_code = file_data.decode("utf-8")
+            except UnicodeDecodeError:
+                return "The uploaded file could not be read as UTF-8 text.", 400
+
+        # Scan the code
         if submitted_code.strip():
 
             findings = scan_code(submitted_code)
 
             score, risk, high, medium, low = calculate_risk(findings)
-            save_scan_history(score, risk, high, medium, low)
+
+            save_scan_history(
+                score,
+                risk,
+                high,
+                medium,
+                low
+            )
 
     return render_template(
         "dashboard.html",

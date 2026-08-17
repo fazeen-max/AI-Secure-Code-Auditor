@@ -22,5 +22,69 @@
         "high": 0,
         "medium": 0,
         "low": 0
+    },
+    {
+        "date": "2026-08-16 22:10:49",
+        "score": 100,
+        "risk": "LOW",
+        "high": 0,
+        "medium": 0,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:10:58",
+        "score": 100,
+        "risk": "LOW",
+        "high": 0,
+        "medium": 0,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:17:33",
+        "score": 100,
+        "risk": "LOW",
+        "high": 0,
+        "medium": 0,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:17:59",
+        "score": 100,
+        "risk": "LOW",
+        "high": 0,
+        "medium": 0,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:25:11",
+        "score": 100,
+        "risk": "LOW",
+        "high": 0,
+        "medium": 0,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:25:15",
+        "score": 100,
+        "risk": "LOW",
+        "high": 0,
+        "medium": 0,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:25:26",
+        "score": 75,
+        "risk": "MEDIUM",
+        "high": 1,
+        "medium": 0,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:29:25",
+        "score": 75,
+        "risk": "MEDIUM",
+        "high": 1,
+        "medium": 0,
+        "low": 0
     }
 ]

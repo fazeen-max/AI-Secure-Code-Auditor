@@ -310,7 +310,7 @@
                 font-size: 30px;
             }
         }
-    </style>
+    
     .report-button {
     display: inline-block;
     margin-bottom: 15px;
@@ -327,6 +327,7 @@
 .report-button:hover {
     background: #1d242d;
 }
+</style>
 </head>
 
 <body>
@@ -356,17 +357,29 @@
 
             <h2>Source Code Analysis</h2>
 
-            <form method="POST">
+           <form method="POST" enctype="multipart/form-data">
 
-                <textarea
-                    name="code"
-                    placeholder="Paste source code here for security analysis...">{{ submitted_code }}</textarea>
+    <textarea
+        name="code"
+        placeholder="Paste source code here for security analysis...">{{ submitted_code }}</textarea>
 
-                <button class="scan-button" type="submit">
-                    ANALYZE CODE
-                </button>
+    <div class="upload-section">
+        <label for="code_file">Or upload a source-code file</label>
 
-            </form>
+        <input
+            type="file"
+            id="code_file"
+            name="code_file"
+            accept=".py,.js,.java,.php">
+
+        <small>Supported files: .py, .js, .java, .php — Maximum size: 500 KB</small>
+    </div>
+
+    <button class="scan-button" type="submit">
+        ANALYZE CODE
+    </button>
+
+</form>
 
         </div>
 
