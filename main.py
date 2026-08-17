@@ -128,6 +128,31 @@ def dashboard():
                 medium,
                 low
             )
+            history = load_history()
+
+    total_scans = len(history)
+
+    high_scans = sum(
+        1 for scan in history
+        if scan.get("risk") == "HIGH"
+    )
+
+    medium_scans = sum(
+        1 for scan in history
+        if scan.get("risk") == "MEDIUM"
+    )
+
+    low_scans = sum(
+        1 for scan in history
+        if scan.get("risk") == "LOW"
+    )
+
+    if history:
+        average_score = round(
+            sum(scan.get("score", 0) for scan in history) / len(history)
+        )
+    else:
+        average_score = 0
 
     return render_template(
         "dashboard.html",
@@ -137,7 +162,12 @@ def dashboard():
         risk=risk,
         high=high,
         medium=medium,
-        low=low
+        low=low,
+        total_scans=total_scans,
+        high_scans=high_scans,
+        medium_scans=medium_scans,
+        low_scans=low_scans,
+        average_score=average_score
     )
 @app.route("/download-report")
 def download_report():

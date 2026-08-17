@@ -94,5 +94,29 @@
         "high": 1,
         "medium": 1,
         "low": 0
+    },
+    {
+        "date": "2026-08-16 22:45:53",
+        "score": 60,
+        "risk": "MEDIUM",
+        "high": 1,
+        "medium": 1,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:45:59",
+        "score": 60,
+        "risk": "MEDIUM",
+        "high": 1,
+        "medium": 1,
+        "low": 0
+    },
+    {
+        "date": "2026-08-16 22:48:10",
+        "score": 60,
+        "risk": "MEDIUM",
+        "high": 1,
+        "medium": 1,
+        "low": 0
     }
 ]

@@ -327,6 +327,44 @@
 .report-button:hover {
     background: #1d242d;
 }
+.analytics-card {
+    margin-top: 25px;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.analytics-stat {
+    background: #0b0e12;
+    border: 1px solid #252c36;
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+}
+
+.analytics-stat strong {
+    display: block;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.analytics-stat span {
+    display: block;
+    margin-top: 7px;
+    color: #64748b;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+@media (max-width: 850px) {
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 </head>
 
@@ -519,6 +557,45 @@
         </div>
 
     </div>
+
+
+    <!-- SCAN HISTORY ANALYTICS -->
+
+    <div class="card analytics-card">
+
+        <h2>Scan History Analytics</h2>
+
+        <div class="analytics-grid">
+
+            <div class="analytics-stat">
+                <strong>{{ total_scans }}</strong>
+                <span>Total Scans</span>
+            </div>
+
+            <div class="analytics-stat">
+                <strong>{{ high_scans }}</strong>
+                <span>High Risk Scans</span>
+            </div>
+
+            <div class="analytics-stat">
+                <strong>{{ medium_scans }}</strong>
+                <span>Medium Risk Scans</span>
+            </div>
+
+            <div class="analytics-stat">
+                <strong>{{ low_scans }}</strong>
+                <span>Low Risk Scans</span>
+            </div>
+
+            <div class="analytics-stat">
+                <strong>{{ average_score }}</strong>
+                <span>Average Score</span>
+            </div>
+
+        </div>
+
+    </div>
+
 
 </div>
 
