@@ -130,6 +130,40 @@ def scan_code(code):
                 "message": "The code contains a non-encrypted HTTP URL.",
                 "recommendation": "Use HTTPS when transmitting sensitive or security-relevant data."
             })
+            # Insecure Deserialization
+        if re.search(
+            r'\bpickle\.(load|loads)\s*\(',
+            line,
+            re.IGNORECASE
+        ):
+            findings.append({
+                "type": "Insecure Deserialization",
+                "severity": "HIGH",
+                "line": line_number,
+                "code": line.strip(),
+                "message": "Pickle can execute arbitrary code when loading untrusted serialized data.",
+                "recommendation": "Never deserialize untrusted data with pickle. Use a safer data format such as JSON."
+            })
+
+
+        # Weak Randomness for Security
+        if re.search(
+            r'\brandom\.(random|randint|choice|randrange)\s*\(',
+            line,
+            re.IGNORECASE
+        ) and re.search(
+            r'(token|password|secret|key|session|otp)',
+            line,
+            re.IGNORECASE
+        ):
+            findings.append({
+                "type": "Weak Randomness",
+                "severity": "MEDIUM",
+                "line": line_number,
+                "code": line.strip(),
+                "message": "A non-cryptographic random generator may be used for security-sensitive data.",
+                "recommendation": "Use Python's secrets module for security-sensitive tokens, passwords, and authentication values."
+            })
 
 
     return findings
