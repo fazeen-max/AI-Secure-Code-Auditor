@@ -311,6 +311,22 @@
             }
         }
     </style>
+    .report-button {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 10px 16px;
+    background: #151a21;
+    border: 1px solid #3b4654;
+    border-radius: 7px;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.report-button:hover {
+    background: #1d242d;
+}
 </head>
 
 <body>
@@ -358,6 +374,9 @@
         <!-- RESULTS -->
 
         <div class="card">
+            <a href="/download-report" class="report-button">
+    Download Security Report
+</a>
 
             <h2>Security Findings</h2>
             {% if score is not none %}

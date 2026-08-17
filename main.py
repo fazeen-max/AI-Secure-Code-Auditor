@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from analyzer.scanner import scan_code
 import json
 import os
 from datetime import datetime
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
 HISTORY_FILE = "scan_history.json"
@@ -94,6 +96,59 @@ def dashboard():
         high=high,
         medium=medium,
         low=low
+    )
+@app.route("/download-report")
+def download_report():
+
+    history = load_history()
+
+    if not history:
+        return "No scan history available. Run a scan first.", 400
+
+    latest = history[-1]
+
+    filename = "security_report.pdf"
+
+    c = canvas.Canvas(filename, pagesize=A4)
+
+    width, height = A4
+    y = height - 50
+
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(50, y, "AI Secure Code Auditor")
+
+    y -= 30
+
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(50, y, "Security Audit Report")
+
+    y -= 35
+
+    c.setFont("Helvetica", 11)
+
+    c.drawString(50, y, f"Scan Date: {latest['date']}")
+    y -= 20
+
+    c.drawString(50, y, f"Security Score: {latest['score']}/100")
+    y -= 20
+
+    c.drawString(50, y, f"Overall Risk: {latest['risk']}")
+    y -= 30
+
+    c.drawString(50, y, f"HIGH Findings: {latest['high']}")
+    y -= 20
+
+    c.drawString(50, y, f"MEDIUM Findings: {latest['medium']}")
+    y -= 20
+
+    c.drawString(50, y, f"LOW Findings: {latest['low']}")
+
+    c.save()
+
+    return send_file(
+        filename,
+        as_attachment=True,
+        download_name="security_report.pdf"
     )
 @app.route("/history")
 def history():
